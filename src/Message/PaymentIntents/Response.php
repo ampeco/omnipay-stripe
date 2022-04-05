@@ -114,6 +114,10 @@ class Response extends BaseResponse implements RedirectResponseInterface
      */
     public function isSuccessful()
     {
+        if (empty($this->data)) {
+            return false;
+        }
+
         if (isset($this->data['object']) && 'payment_intent' === $this->data['object']) {
             return in_array($this->getStatus(), ['succeeded', 'requires_capture']);
         }
