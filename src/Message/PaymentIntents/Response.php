@@ -172,4 +172,18 @@ class Response extends BaseResponse implements RedirectResponseInterface
 
         return null;
     }
+
+    public function requiresAuthentication(): bool
+    {
+        return $this->getCode() === 'authentication_required';
+    }
+
+    public function getClientSecretFromError()
+    {
+        if (isset($this->data['error']) && isset($this->data['error']['payment_intent'])) {
+            if (!empty($this->data['error']['payment_intent']['client_secret'])) {
+                return $this->data['error']['payment_intent']['client_secret'];
+            }
+        }
+    }
 }
