@@ -1,4 +1,5 @@
 <?php
+
 namespace Omnipay\Stripe\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
@@ -6,9 +7,7 @@ use Omnipay\Common\Message\RequestInterface;
 
 class RestResponse extends AbstractResponse
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $statusCode;
 
     /**
@@ -18,13 +17,12 @@ class RestResponse extends AbstractResponse
      */
     public function __construct(RequestInterface $request, array $data, int $statusCode)
     {
-        \Illuminate\Support\Facades\Log::info('we are in __construct' . $statusCode);
         parent::__construct($request, $data);
         $this->statusCode = $statusCode;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isSuccessful()
     {
@@ -32,11 +30,23 @@ class RestResponse extends AbstractResponse
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getCode()
     {
-        \Illuminate\Support\Facades\Log::info('we are in getCode' . $this->statusCode);
         return $this->statusCode;
+    }
+
+    public function getPaymentToken()
+    {
+        return $this->data['data']['object']['payment_method'] ?? null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTransactionReference()
+    {
+        return $this->data['data']['object']['charges']['data'][0]['id'] ?? null;
     }
 }

@@ -193,8 +193,7 @@ class PaymentIntentsGateway extends AbstractGateway
 
     public function acceptNotification(array $requestData)
     {
-        \Illuminate\Support\Facades\Log::info('we are in acceptNotification', $requestData);
-        if (isset($requestData['type']) && $requestData['type'] !== 'payment_intent.succeeded"') {
+        if (isset($requestData['type']) && $requestData['type'] !== 'payment_intent.succeeded') {
             $isSuccessfull = false;
             $notificationStatusCode = 400;
         } else {
