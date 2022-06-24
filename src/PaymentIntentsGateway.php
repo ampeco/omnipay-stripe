@@ -6,6 +6,9 @@
 
 namespace Omnipay\Stripe;
 
+use Omnipay\Stripe\Message\PaymentIntents\PurchaseRequest;
+use Omnipay\Stripe\Message\RestResponse;
+
 /**
  * Stripe Payment Intents Gateway.
  *
@@ -186,5 +189,25 @@ class PaymentIntentsGateway extends AbstractGateway
     public function retrieveSetupIntent(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\Stripe\Message\SetupIntents\RetrieveSetupIntentRequest', $parameters);
+    }
+
+    public function acceptNotification(array $requestData)
+    {
+        \Illuminate\Support\Facades\Log::info('we are in acceptNotification', $requestData);
+        if (isset($requestData['type']) && $requestData['type'] !== 'payment_intent.succeeded"') {
+            $isSuccessfull = false;
+            $notificationStatusCode = 400;
+        } else {
+            $isSuccessfull = true;
+            $notificationStatusCode = 200;
+        }
+
+        return new RestResponse(
+            $this->createRequest(PurchaseRequest::class, $requestData),
+            array_merge($requestData, [
+                'isSuccessful' => $isSuccessfull,
+            ]),
+            $notificationStatusCode
+        );
     }
 }
