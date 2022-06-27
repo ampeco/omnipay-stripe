@@ -49,4 +49,9 @@ class RestResponse extends AbstractResponse
     {
         return $this->data['data']['object']['charges']['data'][0]['id'] ?? null;
     }
+
+    public function getMessage()
+    {
+        return $this->data['data']['object']['charges']['data'][0]['failure_message'] ?? null;
+    }
 }
