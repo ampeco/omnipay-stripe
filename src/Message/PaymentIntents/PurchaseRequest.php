@@ -33,7 +33,6 @@ class PurchaseRequest extends AuthorizeRequest
     public function getData()
     {
         $data = parent::getData();
-        $data['confirmation_method'] = 'automatic';
         $data['capture_method'] = 'automatic';
         $data['confirmation_method'] = 'automatic';
 
