@@ -7,7 +7,7 @@
 namespace Omnipay\Stripe;
 
 use Omnipay\Stripe\Message\PaymentIntents\PurchaseRequest;
-use Omnipay\Stripe\Message\RestResponse;
+use Omnipay\Stripe\Message\NotificationResponse;
 
 /**
  * Stripe Payment Intents Gateway.
@@ -201,7 +201,7 @@ class PaymentIntentsGateway extends AbstractGateway
             $notificationStatusCode = 200;
         }
 
-        return new RestResponse(
+        return new NotificationResponse(
             $this->createRequest(PurchaseRequest::class, $requestData),
             array_merge($requestData, [
                 'isSuccessful' => $isSuccessfull,
