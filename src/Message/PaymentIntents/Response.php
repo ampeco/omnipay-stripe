@@ -145,7 +145,7 @@ class Response extends BaseResponse implements RedirectResponseInterface
         if ($this->getStatus() === 'requires_action' || $this->getStatus() === 'requires_source_action') {
             // Currently this gateway supports only manual confirmation, so any other
             // next action types pretty much mean a failed transaction for us.
-            return (!empty($this->data['next_action']) && $this->data['next_action']['type'] === 'redirect_to_url');
+            return !empty($this->data['next_action']) && $this->data['next_action']['type'] === 'redirect_to_url';
         }
 
         return parent::isRedirect();
@@ -171,5 +171,15 @@ class Response extends BaseResponse implements RedirectResponseInterface
         }
 
         return null;
+    }
+
+    public function requiresAuthentication(): bool
+    {
+        return $this->getCode() === 'authentication_required';
+    }
+
+    public function getClientSecretFromError()
+    {
+        return $this->data['error']['payment_intent']['client_secret'] ?? null;
     }
 }
