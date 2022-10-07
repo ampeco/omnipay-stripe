@@ -3,10 +3,11 @@
 /**
  * Stripe Payment Intents Response.
  */
+
 namespace Omnipay\Stripe\Message\PaymentIntents;
 
-use Omnipay\Stripe\Message\Response as BaseResponse;
 use Omnipay\Common\Message\RedirectResponseInterface;
+use Omnipay\Stripe\Message\Response as BaseResponse;
 
 /**
  * Stripe Payment Intents Response.
@@ -181,5 +182,10 @@ class Response extends BaseResponse implements RedirectResponseInterface
     public function getClientSecretFromError()
     {
         return $this->data['error']['payment_intent']['client_secret'] ?? null;
+    }
+
+    public function isAmountTooSmall() : bool
+    {
+        return $this->getCode() === 'amount_too_small';
     }
 }
