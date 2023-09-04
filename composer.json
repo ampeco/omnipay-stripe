@@ -2,6 +2,7 @@
     "name": "omnipay/stripe",
     "type": "library",
     "description": "Stripe driver for the Omnipay payment processing library",
+    "version": "1.0.0",
     "keywords": [
         "gateway",
         "merchant",
