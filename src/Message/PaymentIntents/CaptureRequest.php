@@ -39,6 +39,10 @@ class CaptureRequest extends AbstractRequest
             $data['amount_to_capture'] = $amount;
         }
 
+        if (!empty($metadata = $this->getMetadata())) {
+            $data['metadata'] = $metadata;
+        }
+
         return $data;
     }
 
