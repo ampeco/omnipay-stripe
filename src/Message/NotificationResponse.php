@@ -54,4 +54,9 @@ class NotificationResponse extends AbstractResponse
     {
         return $this->data['data']['object']['charges']['data'][0]['failure_message'] ?? null;
     }
+
+    public function getTransactionStatus()
+    {
+        return $this->data['data']['object']['outcome']['type'] ?? null;
+    }
 }
