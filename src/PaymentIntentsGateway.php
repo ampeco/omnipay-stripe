@@ -140,6 +140,14 @@ class PaymentIntentsGateway extends AbstractGateway
     }
 
     /**
+     * @return \Omnipay\Stripe\Message\PaymentIntents\ClonePaymentMethodRequest
+     */
+    public function cloneCard(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\Stripe\Message\PaymentIntents\ClonePaymentMethodRequest', $parameters);
+    }
+
+    /**
      * @inheritdoc
      *
      * @return \Omnipay\Stripe\Message\PaymentIntents\CreatePaymentMethodRequest
