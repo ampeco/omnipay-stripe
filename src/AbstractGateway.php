@@ -170,6 +170,26 @@ abstract class AbstractGateway extends AbstractOmnipayGateway
     }
 
     /**
+     * Connect only
+     *
+     * @return mixed
+     */
+    public function getConnectedStripeAccount()
+    {
+        return $this->getParameter('connectedStripeAccount');
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return Gateway
+     */
+    public function setConnectedStripeAccount($value)
+    {
+        return $this->setParameter('connectedStripeAccount', $value);
+    }
+
+    /**
      * Authorize Request.
      *
      * An Authorize request is similar to a purchase request but the
