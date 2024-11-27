@@ -69,4 +69,31 @@ abstract class AbstractRequest extends \Omnipay\Stripe\Message\AbstractRequest
     {
         return $this->setParameter('metadata', $value);
     }
+
+    /**
+     * @return array|null
+     */
+    public function getPaymentMethodTypes()
+    {
+        return $this->getParameter('paymentMethodTypes');
+    }
+
+    /**
+     * @param array $value
+     * @return self
+     */
+    public function setPaymentMethodTypes($value)
+    {
+        return $this->setParameter('paymentMethodTypes', $value);
+    }
+
+    public function getCaptureMethod()
+    {
+        return $this->getParameter('captureMethod');
+    }
+
+    public function setCaptureMethod($value)
+    {
+        return $this->setParameter('captureMethod', $value);
+    }
 }

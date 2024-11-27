@@ -374,6 +374,8 @@ class AuthorizeRequest extends AbstractRequest
                 'type' => 'card',
                 'card' => ['token' => $this->getToken()],
             ];
+        } elseif ($this->getPaymentMethodTypes()) {
+            $data['payment_method_types'] = $this->getPaymentMethodTypes();
         } else {
             // one of cardReference, token, or card is required
             $this->validate('paymentMethod');
@@ -384,16 +386,19 @@ class AuthorizeRequest extends AbstractRequest
         }
 
         $data['confirmation_method'] = $this->getConfirmationMethod() ?? 'manual';
-        $data['capture_method'] = 'manual';
+        if ($this->getCaptureMethod()) {
+            $data['capture_method'] = $this->getCaptureMethod();
+        } else {
+            $data['capture_method'] = 'manual';
+        }
 
         $data['confirm'] = $this->getConfirm() ? 'true' : 'false';
 
         if ($this->getConfirm()) {
             $this->validate('returnUrl');
             $data['return_url'] = $this->getReturnUrl();
+            $data['off_session'] = $this->getOffSession() ? 'true' : 'false';
         }
-        $data['off_session'] = $this->getOffSession() ? 'true' : 'false';
-
 
         return $data;
     }
