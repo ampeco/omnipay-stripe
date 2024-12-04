@@ -50,6 +50,19 @@ class NotificationResponse extends AbstractResponse
         return $this->data['data']['object']['charges']['data'][0]['id'] ?? null;
     }
 
+    /**
+     * @return string|null
+     */
+    public function getPaymentIntentId()
+    {
+        return $this->data['data']['object']['id'] ?? null;
+    }
+
+    public function getEventType(): string
+    {
+        return $this->data['type'];
+    }
+
     public function getMessage()
     {
         return $this->data['data']['object']['charges']['data'][0]['failure_message'] ?? null;
