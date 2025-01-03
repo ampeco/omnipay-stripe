@@ -101,6 +101,20 @@ class Response extends AbstractResponse implements RedirectResponseInterface
     }
 
     /**
+     * Get the payment intent reference.
+     *
+     * @return string|null
+     */
+    public function getPaymentIntentReference()
+    {
+        if (isset($this->data['object']) && 'payment_intent' === $this->data['object']) {
+            return $this->data['id'];
+        }
+
+        return null;
+    }
+
+    /**
      * Get the balance transaction reference.
      *
      * @return string|null
