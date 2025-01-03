@@ -111,6 +111,10 @@ class Response extends AbstractResponse implements RedirectResponseInterface
             return $this->data['id'];
         }
 
+        if (isset($this->data['error']['payment_intent'])) {
+            return $this->data['error']['payment_intent']['id'];
+        }
+
         return null;
     }
 

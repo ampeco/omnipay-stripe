@@ -160,20 +160,6 @@ class Response extends BaseResponse implements RedirectResponseInterface
         return $this->isRedirect() ? $this->data['next_action']['redirect_to_url']['url'] : parent::getRedirectUrl();
     }
 
-    /**
-     * Get the payment intent reference.
-     *
-     * @return string|null
-     */
-    public function getPaymentIntentReference()
-    {
-        if (isset($this->data['object']) && 'payment_intent' === $this->data['object']) {
-            return $this->data['id'];
-        }
-
-        return null;
-    }
-
     public function requiresAuthentication(): bool
     {
         return $this->getCode() === 'authentication_required';
