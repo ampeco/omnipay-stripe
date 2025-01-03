@@ -65,7 +65,7 @@ class NotificationResponse extends AbstractResponse
 
     public function getMessage()
     {
-        return $this->data['data']['object']['charges']['data'][0]['failure_message'] ?? null;
+        return $this->data['data']['object']['last_payment_error']['code'] ?? null;
     }
 
     public function getTransactionStatus()
