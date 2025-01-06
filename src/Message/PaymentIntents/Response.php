@@ -102,12 +102,14 @@ class Response extends BaseResponse implements RedirectResponseInterface
     public function getTransactionReference()
     {
         if (isset($this->data['object']) && 'payment_intent' === $this->data['object']) {
-            if (!empty($this->data['charges']['data'][0]['id'])) {
-                return $this->data['charges']['data'][0]['id'];
-            }
+            return $this->data['id'];
         }
 
-        return parent::getTransactionReference();
+        if (isset($this->data['error']['payment_intent'])) {
+            return $this->data['error']['payment_intent']['id'];
+        }
+
+        return null;
     }
 
     /**
@@ -158,6 +160,24 @@ class Response extends BaseResponse implements RedirectResponseInterface
     public function getRedirectUrl()
     {
         return $this->isRedirect() ? $this->data['next_action']['redirect_to_url']['url'] : parent::getRedirectUrl();
+    }
+
+    /**
+     * Get the payment intent reference.
+     *
+     * @return string|null
+     */
+    public function getPaymentIntentReference()
+    {
+        if (isset($this->data['object']) && 'payment_intent' === $this->data['object']) {
+            return $this->data['id'];
+        }
+
+        if (isset($this->data['error']['payment_intent'])) {
+            return $this->data['error']['payment_intent']['id'];
+        }
+
+        return null;
     }
 
     public function requiresAuthentication(): bool
