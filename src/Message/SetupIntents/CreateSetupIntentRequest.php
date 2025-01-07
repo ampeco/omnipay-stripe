@@ -23,6 +23,23 @@ namespace Omnipay\Stripe\Message\SetupIntents;
 class CreateSetupIntentRequest extends AbstractRequest
 {
     /**
+     * @return array|null
+     */
+    public function getPaymentMethodTypes()
+    {
+        return $this->getParameter('paymentMethodTypes');
+    }
+
+    /**
+     * @param array|null $value
+     * @return self
+     */
+    public function setPaymentMethodTypes($value): self
+    {
+        return $this->setParameter('paymentMethodTypes', $value);
+    }
+
+    /**
      * @inheritdoc
      */
     public function getData()
@@ -44,7 +61,11 @@ class CreateSetupIntentRequest extends AbstractRequest
         }
 
         $data['usage'] = 'off_session';
-        $data['payment_method_types'][] = 'card';
+        if ($this->getPaymentMethodTypes() !== null) {
+            $data['payment_method_types'] = $this->getPaymentMethodTypes();
+        } else {
+            $data['payment_method_types'][] = 'card';
+        }
 
         return $data;
     }

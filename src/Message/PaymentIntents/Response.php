@@ -194,4 +194,9 @@ class Response extends BaseResponse implements RedirectResponseInterface
     {
         return $this->getCode() === 'amount_too_small';
     }
+
+    public function isPending(): bool
+    {
+        return isset($this->data['status']) && $this->data['status'] === 'processing';
+    }
 }
