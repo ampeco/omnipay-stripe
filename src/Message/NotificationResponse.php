@@ -50,9 +50,12 @@ class NotificationResponse extends AbstractResponse
         return $this->data['data']['object']['id'];
     }
 
-    public function getEventType(): string
+    /**
+     * @return string|null
+     */
+    public function getEventType()
     {
-        return $this->data['type'];
+        return $this->data['type'] ?? null;
     }
 
     public function getMessage()
