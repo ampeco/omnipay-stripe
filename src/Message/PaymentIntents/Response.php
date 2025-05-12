@@ -105,8 +105,10 @@ class Response extends BaseResponse implements RedirectResponseInterface
             return $this->data['id'];
         }
 
-        if (isset($this->data['error']['payment_intent'])) {
-            return $this->data['error']['payment_intent']['id'];
+        if (isset($this->data['object']) && 'payment_intent' === $this->data['object']) {
+            if (!empty($this->data['charges']['data'][0]['id'])) {
+                return $this->data['charges']['data'][0]['id'];
+            }
         }
 
         return null;
@@ -145,6 +147,18 @@ class Response extends BaseResponse implements RedirectResponseInterface
      */
     public function isRedirect()
     {
+        /**
+         * From Stripe docs:
+         *
+         * Since 2019, card issuers can provide an authentication_required decline code when declining an attempted payment. Typically, this means that a customer should retry the payment using 3D Secure authentication. The bank may request authentication to comply with regulation, such as Strong Customer Authentication in Europe, or to validate that the customer is legitimate.
+         * However, card issuers occasionally provide an authentication_required decline code on a payment that has already gone through 3D Secure. This usually occurs on Mastercard branded cards where the card issuer has not yet updated their systems, and occurs because the indicators for the authentication_required code previously signaled a different decline code (withdrawal_count_limit_exceeded).
+         *
+         * We treat `authentication_required` as redirect because the user will be redirected with the stripe sdk to complete this payment
+         */
+        if ($this->getCode() === 'authentication_required') {
+            return true;
+        }
+
         if ($this->getStatus() === 'requires_action' || $this->getStatus() === 'requires_source_action') {
             // Currently this gateway supports only manual confirmation, so any other
             // next action types pretty much mean a failed transaction for us.
@@ -163,9 +177,8 @@ class Response extends BaseResponse implements RedirectResponseInterface
     }
 
     /**
-     * Get the payment intent reference.
-     *
      * @return string|null
+     * @deprecated use @see Response::getTransactionReference() it does the same thing
      */
     public function getPaymentIntentReference()
     {
@@ -173,16 +186,7 @@ class Response extends BaseResponse implements RedirectResponseInterface
             return $this->data['id'];
         }
 
-        if (isset($this->data['error']['payment_intent'])) {
-            return $this->data['error']['payment_intent']['id'];
-        }
-
         return null;
-    }
-
-    public function requiresAuthentication(): bool
-    {
-        return $this->getCode() === 'authentication_required';
     }
 
     public function getClientSecretFromError()
@@ -190,13 +194,9 @@ class Response extends BaseResponse implements RedirectResponseInterface
         return $this->data['error']['payment_intent']['client_secret'] ?? null;
     }
 
-    public function isAmountTooSmall() : bool
-    {
-        return $this->getCode() === 'amount_too_small';
-    }
-
     public function isPending(): bool
     {
-        return isset($this->data['status']) && $this->data['status'] === 'processing';
+        return $this->getCode() === 'authentication_required'
+            || (isset($this->data['status']) && $this->data['status'] === 'processing');
     }
 }
