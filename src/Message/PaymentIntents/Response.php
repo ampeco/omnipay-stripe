@@ -105,10 +105,8 @@ class Response extends BaseResponse implements RedirectResponseInterface
             return $this->data['id'];
         }
 
-        if (isset($this->data['object']) && 'payment_intent' === $this->data['object']) {
-            if (!empty($this->data['charges']['data'][0]['id'])) {
-                return $this->data['charges']['data'][0]['id'];
-            }
+        if (isset($this->data['error']['payment_intent'])) {
+            return $this->data['error']['payment_intent']['id'];
         }
 
         return null;
@@ -155,10 +153,9 @@ class Response extends BaseResponse implements RedirectResponseInterface
          *
          * We treat `authentication_required` as redirect because the user will be redirected with the stripe sdk to complete this payment
          */
-        if ($this->getCode() === 'authentication_required') {
+        if (isset($this->data['error']['code']) && $this->data['error']['code'] === 'authentication_required') {
             return true;
         }
-
         if ($this->getStatus() === 'requires_action' || $this->getStatus() === 'requires_source_action') {
             // Currently this gateway supports only manual confirmation, so any other
             // next action types pretty much mean a failed transaction for us.
@@ -176,19 +173,6 @@ class Response extends BaseResponse implements RedirectResponseInterface
         return $this->isRedirect() ? $this->data['next_action']['redirect_to_url']['url'] : parent::getRedirectUrl();
     }
 
-    /**
-     * @return string|null
-     * @deprecated use @see Response::getTransactionReference() it does the same thing
-     */
-    public function getPaymentIntentReference()
-    {
-        if (isset($this->data['object']) && 'payment_intent' === $this->data['object']) {
-            return $this->data['id'];
-        }
-
-        return null;
-    }
-
     public function getClientSecretFromError()
     {
         return $this->data['error']['payment_intent']['client_secret'] ?? null;
@@ -196,7 +180,7 @@ class Response extends BaseResponse implements RedirectResponseInterface
 
     public function isPending(): bool
     {
-        return $this->getCode() === 'authentication_required'
+        return (isset($this->data['error']['code']) && $this->data['error']['code'] === 'authentication_required')
             || (isset($this->data['status']) && $this->data['status'] === 'processing');
     }
 }
