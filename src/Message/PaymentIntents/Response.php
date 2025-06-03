@@ -156,6 +156,9 @@ class Response extends BaseResponse implements RedirectResponseInterface
         if (isset($this->data['error']['code']) && $this->data['error']['code'] === 'authentication_required') {
             return true;
         }
+        if ($this->getStatus() === 'requires_payment_method') {
+            return true;
+        }
         if ($this->getStatus() === 'requires_action' || $this->getStatus() === 'requires_source_action') {
             // Currently this gateway supports only manual confirmation, so any other
             // next action types pretty much mean a failed transaction for us.
@@ -175,12 +178,13 @@ class Response extends BaseResponse implements RedirectResponseInterface
 
     public function getClientSecretFromError()
     {
-        return $this->data['error']['payment_intent']['client_secret'] ?? null;
+        return $this->data['error']['payment_intent']['client_secret'] ?? $this->data['client_secret'] ?? null;
     }
 
-    public function isPending(): bool
+    public function isPending()
     {
         return (isset($this->data['error']['code']) && $this->data['error']['code'] === 'authentication_required')
-            || (isset($this->data['status']) && $this->data['status'] === 'processing');
+            || (isset($this->data['status']) && $this->data['status'] === 'processing')
+            || (isset($this->data['status']) && $this->data['status'] === 'requires_payment_method');
     }
 }
