@@ -9,14 +9,12 @@ namespace Omnipay\Stripe\Message;
 /**
  * Stripe Refund Request.
  *
- * When you create a new refund, you must specify a
- * charge to create it on.
+ * When you create a new refund, you must specify a Charge or
+ * a PaymentIntent object on which to create it.
  *
- * Creating a new refund will refund a charge that has
- * previously been created but not yet refunded. Funds will
- * be refunded to the credit or debit card that was originally
- * charged. The fees you were originally charged are also
- * refunded.
+ * Creating a new refund will refund a charge that has previously
+ * been created but not yet refunded. Funds will be refunded to
+ * the credit or debit card that was originally charged.
  *
  * You can optionally refund only part of a charge. You can
  * do so as many times as you wish until the entire charge
@@ -35,7 +33,7 @@ namespace Omnipay\Stripe\Message;
  *   // Do a refund transaction on the gateway
  *   $transaction = $gateway->refund(array(
  *       'amount'                   => '10.00',
- *       'transactionReference'     => $sale_id,
+ *       'transactionReference'     => $paymentIntent,
  *   ));
  *   $response = $transaction->send();
  *   if ($response->isSuccessful()) {
@@ -114,6 +112,7 @@ class RefundRequest extends AbstractRequest
 
         $data = array();
         $data['amount'] = $this->getAmountInteger();
+        $data['payment_intent'] = $this->getTransactionReference();
 
         if ($this->getRefundApplicationFee()) {
             $data['refund_application_fee'] = 'true';
@@ -128,6 +127,6 @@ class RefundRequest extends AbstractRequest
 
     public function getEndpoint()
     {
-        return $this->endpoint.'/charges/'.$this->getTransactionReference().'/refund';
+        return $this->endpoint.'/refunds';
     }
 }
