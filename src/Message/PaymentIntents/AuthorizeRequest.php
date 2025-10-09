@@ -3,6 +3,7 @@
 /**
  * Stripe Payment Intents Authorize Request.
  */
+
 namespace Omnipay\Stripe\Message\PaymentIntents;
 
 use Money\Formatter\DecimalMoneyFormatter;
@@ -100,8 +101,8 @@ use Money\Formatter\DecimalMoneyFormatter;
  * </code>
  *
  * @see \Omnipay\Stripe\PaymentIntentsGateway
- * @see \Omnipay\Stripe\Message\PaymentIntents\CreatePaymentMethodRequest
- * @see \Omnipay\Stripe\Message\PaymentIntents\ConfirmPaymentIntentRequest
+ * @see CreatePaymentMethodRequest
+ * @see ConfirmPaymentIntentRequest
  * @link https://stripe.com/docs/api/payment_intents
  */
 class AuthorizeRequest extends AbstractRequest
@@ -242,10 +243,9 @@ class AuthorizeRequest extends AbstractRequest
         return $this->setParameter('onBehalfOf', $value);
     }
 
-
     /**
-     * @return string
      * @throws \Omnipay\Common\Exception\InvalidRequestException
+     * @return string
      */
     public function getApplicationFee()
     {
@@ -263,15 +263,15 @@ class AuthorizeRequest extends AbstractRequest
     /**
      * Get the payment amount as an integer.
      *
-     * @return integer
      * @throws \Omnipay\Common\Exception\InvalidRequestException
+     * @return int
      */
     public function getApplicationFeeInteger()
     {
         $money = $this->getMoney('applicationFee');
 
         if ($money !== null) {
-            return (integer) $money->getAmount();
+            return (int) $money->getAmount();
         }
 
         return 0;
@@ -302,7 +302,7 @@ class AuthorizeRequest extends AbstractRequest
      */
     public function setStatementDescriptor($value)
     {
-        $value = str_replace(array('<', '>', '"', '\''), '', $value);
+        $value = str_replace(['<', '>', '"', '\''], '', $value);
 
         return $this->setParameter('statementDescriptor', $value);
     }
@@ -333,7 +333,7 @@ class AuthorizeRequest extends AbstractRequest
     {
         $this->validate('amount', 'currency');
 
-        $data = array();
+        $data = [];
 
         $data['amount'] = $this->getAmountInteger();
         $data['currency'] = strtolower($this->getCurrency());
@@ -352,7 +352,7 @@ class AuthorizeRequest extends AbstractRequest
         }
 
         if ($this->getApplicationFee()) {
-            $data['application_fee'] = $this->getApplicationFeeInteger();
+            $data['application_fee_amount'] = $this->getApplicationFeeInteger();
         }
 
         if ($this->getTransferGroup()) {
@@ -408,7 +408,7 @@ class AuthorizeRequest extends AbstractRequest
      */
     public function getEndpoint()
     {
-        return $this->endpoint.'/payment_intents';
+        return $this->endpoint . '/payment_intents';
     }
 
     /**
