@@ -6,7 +6,6 @@
 
 namespace Omnipay\Stripe;
 
-use Omnipay\Stripe\Message\PaymentIntents\IncrementAuthorizationRequest;
 use Omnipay\Stripe\Message\PaymentIntents\PurchaseRequest;
 use Omnipay\Stripe\Message\NotificationResponse;
 
@@ -82,17 +81,6 @@ class PaymentIntentsGateway extends AbstractGateway
     public function cancel(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\Stripe\Message\PaymentIntents\CancelPaymentIntentRequest', $parameters);
-    }
-
-    /**
-     * Increment an authorized Payment Intent amount.
-     *
-     * @param array $parameters
-     * @return \Omnipay\Stripe\Message\PaymentIntents\IncrementAuthorizationRequest
-     */
-    public function incrementAuthorization(array $parameters = array())
-    {
-        return $this->createRequest(IncrementAuthorizationRequest::class, $parameters);
     }
 
     /**
