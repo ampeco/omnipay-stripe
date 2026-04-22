@@ -1,0 +1,19 @@
+HTTP/1.1 400 Bad Request
+Server: nginx
+Date: Tue, 22 Apr 2026 07:00:00 GMT
+Content-Type: application/json
+Content-Length: 280
+Connection: keep-alive
+Cache-Control: no-cache, no-store
+Request-Id: req_incr_auth_not_supported
+Access-Control-Allow-Credentials: true
+Access-Control-Max-Age: 300
+
+{
+  "error": {
+    "code": "charge_exceeds_transaction_limit",
+    "doc_url": "https://stripe.com/docs/error-codes/charge-exceeds-transaction-limit",
+    "message": "The charge amount exceeds the maximum amount that can be charged on this PaymentIntent.",
+    "type": "invalid_request_error"
+  }
+}

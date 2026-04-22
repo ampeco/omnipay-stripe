@@ -1,0 +1,29 @@
+HTTP/1.1 200 OK
+Server: nginx
+Date: Tue, 22 Apr 2026 07:00:00 GMT
+Content-Type: application/json;charset=utf-8
+Content-Length: 512
+Connection: keep-alive
+Cache-Control: no-cache, no-store
+Request-Id: req_incr_auth_success
+Access-Control-Allow-Credentials: true
+Access-Control-Max-Age: 300
+
+{
+  "id": "pi_1Euf5UFSbr6xR4YAp9PPTxza",
+  "object": "payment_intent",
+  "amount": 15000,
+  "amount_capturable": 15000,
+  "amount_received": 0,
+  "capture_method": "manual",
+  "confirmation_method": "manual",
+  "created": 1562762396,
+  "currency": "usd",
+  "customer": "cus_F1UMEEnT2OBgMg",
+  "description": "Order #153",
+  "livemode": false,
+  "next_action": null,
+  "payment_method": "pm_1Euf5RFSbr6xR4YAwZ5fP28B",
+  "payment_method_types": ["card"],
+  "status": "requires_capture"
+}
