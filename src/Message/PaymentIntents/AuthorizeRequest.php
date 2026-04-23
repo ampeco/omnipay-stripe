@@ -327,6 +327,23 @@ class AuthorizeRequest extends AbstractRequest
     }
 
     /**
+     * @return array|null
+     */
+    public function getPaymentMethodOptions()
+    {
+        return $this->getParameter('paymentMethodOptions');
+    }
+
+    /**
+     * @param array $value
+     * @return AbstractRequest provides a fluent interface.
+     */
+    public function setPaymentMethodOptions($value)
+    {
+        return $this->setParameter('paymentMethodOptions', $value);
+    }
+
+    /**
      * @inheritdoc
      */
     public function getData()
@@ -361,6 +378,10 @@ class AuthorizeRequest extends AbstractRequest
 
         if ($this->getReceiptEmail()) {
             $data['receipt_email'] = $this->getReceiptEmail();
+        }
+
+        if ($this->getPaymentMethodOptions()) {
+            $data['payment_method_options'] = $this->getPaymentMethodOptions();
         }
 
         if ($this->getPaymentMethod()) {
